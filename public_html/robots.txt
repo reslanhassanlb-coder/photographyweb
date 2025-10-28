@@ -1,0 +1,15 @@
+User-agent: *
+Disallow: /vendor/
+Disallow: /storage/
+Disallow: /node_modules/
+Disallow: /config/
+Disallow: /tests/
+Disallow: /artisan
+Disallow: /composer.json
+Disallow: /composer.lock
+
+# Allow main pages
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.hassanreslanphotography.com/sitemap.xml
