@@ -47,3 +47,18 @@
     @include('layouts.footer')
 </body>
 </html>
+@if(session('msg'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: '{{ session('msg')['type'] ?? 'success' }}',
+                title: '{{ session('msg')['text'] ?? '' }}',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+        });
+    </script>
+@endif

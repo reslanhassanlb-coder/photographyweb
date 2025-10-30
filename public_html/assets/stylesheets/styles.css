@@ -14,6 +14,7 @@
     html {
         /* Enables smooth scrolling for all anchor links (e.g., <a href="#section-id">) */
         scroll-behavior: smooth;
+        scroll-padding-top: 200px;
     }
     /* Base Styles & Global Reset */
     * {
@@ -1008,6 +1009,9 @@ BLOG SECTION STYLES (NEW)
 @media (max-width: 600px) {
     .mobile-panel {
         display: block; 
+    }
+    .user-email {
+       display: none;
     }
 }
 

@@ -64,12 +64,13 @@
                 <a href="#" class="nav-icon user-link" id="user-icon-toggle" aria-label="Login or Register">
                     <span class="icon-user-fix" style="margin-right:15px">
                         @if(session('user_email'))
-                            @isset( $profile->avatar)
+                            @if( $profile && $profile->avatar)
                             <img src="{{ $profile->avatar }}" alt="User Avatar" class="user-avatar">
-                            @endisset
+                            @else
                             <img src="{{ asset('assets/images/user.png') }}" alt="User Avatar" class="user-avatar">
-                            <span  class="user-email">{{ session('user_email') }}</span>
-                            <i class="fa fa-caret-down fa-sm"></i>
+                            @endif
+                            <!--<span  class="user-email">{{ session('user_email') }}</span>
+                            <i class="fa fa-caret-down fa-sm" ></i>-->
                         @else
                             <i class="fa fa-user"></i>
                          @endif

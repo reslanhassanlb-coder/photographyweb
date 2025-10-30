@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isMobile) {
                 // MOBILE: Redirect to login form location
                 e.preventDefault();
-                window.location.href = '#contact'; 
+                window.location.href = '/#contact'; 
                 
                 // Close any open panels
                 if (navMenu && navMenu.classList.contains('is-open')) toggleMenu(true);
@@ -346,6 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Find all elements meant to be animated and start watching them
     document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
 });
+
 
 // --- WINDOW LOAD & RESIZE EVENTS (CRITICAL FOR MASONRY RELIABILITY) ---
 

@@ -8,7 +8,8 @@ use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\TwitterCard;
 use Artesaos\SEOTools\Facades\JsonLd;
 use Artesaos\SEOTools\Facades\SEOTools;
-
+use App\Models\VisitorProfile;
+use App\Models\VisitorLog;
 use App\Models\Package;
 use App\Models\blog;
 use App\Models\PackageBooking;
@@ -20,7 +21,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-
+        $profile = VisitorProfile::where('visitor_uuid', session('visitor_uuid'))->first();
         if(session('user_email') ){
             $booking =  PackageBooking::where('user_email', session('user_email'))->first();
         }
@@ -78,7 +79,7 @@ class HomeController extends Controller
         // You can add a price range property too:
         JsonLd::addValue('priceRange', '$$');
 
-        return view('welcome', compact('packages', 'blogs', 'booking'));
+        return view('welcome', compact('profile','packages', 'blogs', 'booking'));
     }
 
     /**

@@ -87,6 +87,10 @@ class SocialAuthController extends Controller
         session(['visitor_profile_id' => $profile->id]);
         session(['user_email' => $profile->email]);
 
+        // We use the custom Auth guard here to ensure the user is officially logged in
+        // by the Laravel system, allowing auth()->check() to work correctly later.
+        Auth::guard('visitor')->login($profile); // <-- ADDED: Explicitly log in via the 'visitor' guard
+
         // redirect to a "thanks" page or back to the packages section
         //return redirect('/')->with('status', 'Profile connected. Thanks!');
         //return redirect()->route('offers')->with('success', 'Welcome  '.$socialUser->getName().'!' . 'please Check our packages below.');
@@ -95,7 +99,12 @@ class SocialAuthController extends Controller
         //echo  $booking ;exit;
         if ($booking) {
             //session(['user_email' => $socialData['email']]);
-            return redirect()->route('booking.show')->with('success', 'Welcome  '.$socialUser->getName().'!' . 'You have an existing booking, please check it below.' );
+           // return redirect()->route('booking.show')->with('success', 'Welcome  '.$socialUser->getName().'!' . 'You have an existing booking, please check it below.' );
+            return redirect()->route('booking.show')->with('msg', [
+                        'type' => 'success',
+                        'msg'  => 'Welcome  '.$socialUser->getName() .'!' . 'You have an existing booking, please check it below.',
+                        'text' => 'Logged in successfully!',
+                        ]);
         }
         else {
             //session(['user_email' => $socialData['email']]);
@@ -108,10 +117,10 @@ class SocialAuthController extends Controller
      *
      * This function allows a new visitor to register using their email and password.
      * Steps performed:
-     *  1. Validate the request data (name, email, password, password confirmation)
-     *  2. Create a new VisitorProfile in the database with hashed password
-     *  3. Log in the newly registered visitor
-     *  4. Redirect to the home page with a success message
+     * 1. Validate the request data (name, email, password, password confirmation)
+     * 2. Create a new VisitorProfile in the database with hashed password
+     * 3. Log in the newly registered visitor
+     * 4. Redirect to the home page with a success message
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
@@ -181,10 +190,31 @@ class SocialAuthController extends Controller
             session(['visitor_uuid' => $visitor->visitor_uuid]);
             Auth::guard('visitor')->login($visitor);
 
-            return redirect('/#packages')->with('msg', [
+             $booking = PackageBooking::where('user_email',  $request->email)->latest()->first();
+
+            if ($booking) {
+                //session(['user_email' => $socialData['email']]);
+                return redirect()->route('booking.show')->with('msg', [
+                    'type' => 'success',
+                    'msg'  => 'Welcome  '. $request->email .'!' . 'You have an existing booking, please check it below.',
+                    'text' => 'Logged in successfully!',
+                    ]);
+            }
+            else {
+                //session(['user_email' => $socialData['email']]);
+                return redirect()->route('offers')->with('msg', [
+                    'type' => 'success',
+                    'msg'  => 'Welcome  '. $request->email.'!' . 'please Check our packages below.',
+                    'text' => 'Logged in successfully!',
+                    ]);
+            }
+
+
+            // 'text'=> 'Welcome  '.$request->email.'!' . 'Logged in successfully!.',
+            /*return redirect('/#packages')->with('msg', [
             'type' => 'success',
             'text' => "Logged in successfully!",
-            ]);
+            ]);*/
         }
 
         //Auth::login($visitor);
@@ -192,29 +222,41 @@ class SocialAuthController extends Controller
     }
 
 
-
-     public function logout(Request $request)
+    /**
+     * Handle visitor logout.
+     *
+     * This function handles a complete logout across all authentication guards
+     * and clears custom session data used for social logins.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function logout(Request $request)
     {
-         // Clear all custom session keys
+        // 1. Log out the specific 'visitor' guard (used for email/password login)
+        Auth::guard('visitor')->logout();
+
+        // 2. Log out the default guard (if it was used for social login or another path)
+        // This is a failsafe.
+        Auth::logout();
+
+        // 3. Clear all custom session keys used for tracking visitor state
         $request->session()->forget([
             'visitor_uuid',
             'visitor_profile_id',
             'user_email',
+            'social_access_token', // Added for completeness
             'social_user'
         ]);
 
-        // Invalidate the session
+        // 4. Invalidate the session and regenerate token
         $request->session()->invalidate();
-
-        // Regenerate CSRF token for security
         $request->session()->regenerateToken();
 
-        // Optional: log out Laravel auth if ever used
-        if (auth()->check()) {
-            auth()->logout();
-        }
-
         // Redirect back to homepage or wherever
-        return redirect('/#packages')->with('success', 'You have been logged out.');
+        return redirect('/#packages')->with('msg', [
+            'type' => 'success',
+            'text' => "You have been logged out.",
+            ]);
     }
 }

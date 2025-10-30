@@ -159,23 +159,33 @@
 </style>
 <div class="container" style="max-width:800px; margin-top:100px;">
     <h2 style="text-align:center; color:#B8860B;">My Booking Details</h2>
-
-    @if(session('success'))
+    @if(session('msg.msg'))
         <div style="background:#d4edda; color:#155724; padding:10px; border-radius:5px; margin-bottom:15px;">
-            {{ session('success') }}
+            {{session('msg.msg')}}
         </div>
     @endif
 
 
-    @if($profile && $profile->avatar)
-    <div class="profile-info">
-        <div class="avatar">
-            <img src="{{ $profile->avatar }}" alt="avatar">
+    @if(session('user_email'))
+        @if($profile && $profile->avatar)
+        <div class="profile-info">
+            <div class="avatar">
+                <img src="{{ $profile->avatar }}" alt="avatar">
+            </div>
+            <div class="info">
+                <p>{{ session('user_email') }}</p>
+            </div>
         </div>
-        <div class="info">
-            <p>{{ $profile->email }}</p>
-        </div>
-    </div>
+        @else
+            <div class="profile-info">
+                <div class="avatar">
+                    <img src="{{ asset('assets/images/user.png') }}" alt="avatar">
+                </div>
+                <div class="info">
+                    <p>{{ session('user_email') }}</p>
+                </div>
+            </div>
+        @endif
     @endif
    <div class="booking-card">
         <div class="thank-text">

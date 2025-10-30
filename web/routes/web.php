@@ -22,21 +22,6 @@ use App\Http\Controllers\OfferController;
 |
 */
 
-/*use Spatie\Sitemap\Sitemap;
-use Spatie\Sitemap\Tags\Url;
-
-Route::get('/sitemap.xml', function() {
-    $sitemap = Sitemap::create()
-        ->add(Url::create('/')->setPriority(1.0)->setChangeFrequency('daily'))
-        ->add(Url::create('/about')->setPriority(0.8)->setChangeFrequency('monthly'))
-        ->add(Url::create('/contact')->setPriority(0.8)->setChangeFrequency('monthly'));
-
-    $sitemap->writeToFile(public_path('sitemap.xml'));
-   return response()->file(public_path('sitemap.xml'));
-});*/
-
-/* language route */
-
 
 
 Route::get('language/{locale}', function ($locale) {
@@ -55,13 +40,6 @@ Route::get('/master', function () {
     return view('layouts.master');
 })->name('master');
 
-/*Route::get('/', function () {
-    return view('welcome');
-})->name('home');*/
-
-/*Route::get('/blog', function () {
-    return view('blog');
-})->name('blogs');*/
 
 Route::get('/', [HomeController::class,'index'])->name('home');
 
@@ -70,23 +48,7 @@ Route::get('/blog', [BlogController::class,'index'])->name('blogs');
 Route::post('/blog', [BlogController::class,'search'])->name('search');
 
 
-/*Route::get('services', function () {
-    return view('services');
-})->name('services');
-
-Route::get('about', function () {
-    return view('about');
-})->name('about');*/
-
-
-/*Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');*/
-
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-Route::get('/about', [AboutController::class, 'index'])->name('about');
-
-Route::post('/contact', [EmailController::class,'sendWelcomeEmail'])->name('sendmail');
+Route::post('/', [EmailController::class,'sendWelcomeEmail'])->name('sendmail');
 
 
 
