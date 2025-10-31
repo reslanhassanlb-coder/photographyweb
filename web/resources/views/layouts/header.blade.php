@@ -14,7 +14,7 @@
 
     <header id="main-header" style="background-color:{{(Request::is('my-booking') || Request::is('offers') || Request::is('blog') || Request::is('blog/*'))  ? 'black' : ''  }}">
         <div class="container nav-bar" >
-            <a href="{{route('home')}}"><img src="{{asset('assets/images/hrlogo.png')}}" style="width:50px; height:50px;"></a>
+            <a href="{{route('home')}}"><img src="{{asset('assets/images/hrlogo.png')}}" alt="Hassan Reslan Photography Logo" style="width:50px; height:50px;"></a>
             <nav id="main-nav-menu" >
                 <ul>
                     <li><a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a></li>

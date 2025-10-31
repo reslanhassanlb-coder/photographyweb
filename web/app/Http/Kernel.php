@@ -7,9 +7,9 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 class Kernel extends HttpKernel
 {
     protected  $routeMiddleware =[
-        'cors' =>  [
-            \App\Http\Middleware\Cors::class,
-        ],
+        'cors' => \App\Http\Middleware\Cors::class,
+         'checkofferlogin' => \App\Http\Middleware\EnsureUserIsLoggedIn::class,
+         'nocache'=> \App\Http\Middleware\PreventBackHistory::class,
     ];
     /**
      * The application's global HTTP middleware stack.
@@ -26,6 +26,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+
     ];
 
     /**
@@ -50,8 +51,9 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        
+
     ];
+
 
     /**
      * The application's middleware aliases.

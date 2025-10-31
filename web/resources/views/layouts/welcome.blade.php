@@ -54,7 +54,7 @@
                         My name is Hassan Reslan, and photography isn't just a career it's the language I use to express the world's beauty. It began as a simple passion ten years ago, observing how light interacts with texture and emotion. Today, it has grown into a commitment to documenting life's most precious and unrepeatable chapters.
                     </p>
                     <p>
-                        I specialize in candid and editorial style photography, focusing less on rigid posing and more on authentic moments. Every click of the shutter is aimed at capturing the real, unfiltered story of your day, resulting in a collection of images that feel deeply personal and timelessly elegant.
+                        I specialize in <strong>candid and editorial style</strong> photography, focusing less on rigid posing and more on authentic moments. Every click of the shutter is aimed at capturing the real, unfiltered story of your day, resulting in a collection of images that feel deeply personal and timelessly elegant.
                     </p>
                     <a href="#contact" class="btn" style="margin-top: 10px;">Let's Discuss Your Vision</a>
                 </div>

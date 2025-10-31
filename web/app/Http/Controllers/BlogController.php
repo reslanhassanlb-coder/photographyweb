@@ -8,9 +8,11 @@ use Artesaos\SEOTools\Facades\TwitterCard;
 use Artesaos\SEOTools\Facades\JsonLd;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Http\Request;
-use App\Models\Blog;
+use App\Models\blog;
 use App\Models\Tag;
 use App\Models\BlogCategory;
+use App\Models\VisitorProfile;
+use App\Models\VisitorLog;
 
 
 class BlogController extends Controller
@@ -20,6 +22,8 @@ class BlogController extends Controller
      */
     public function index()
     {
+
+        $profile = VisitorProfile::where('visitor_uuid', session('visitor_uuid'))->first();
         $allBlogs = Blog:: paginate(6);
         $totalPostCount = Blog::count();
         $categories = BlogCategory::withCount('blogs')->get();
@@ -54,6 +58,7 @@ class BlogController extends Controller
         JsonLd::addImage(asset('assets/images/hero.png'));
 
         return view('blog',[
+            'profile' => $profile,
             'allBlogs' => $allBlogs,
             'categories' => $categories,
             'featuredBlogs' => $featuredBlogs,
@@ -64,6 +69,7 @@ class BlogController extends Controller
 
     public function indexByCategory($slug)
     {
+        $profile = VisitorProfile::where('visitor_uuid', session('visitor_uuid'))->first();
         // 1. Find the Category based on the slug
         $category = BlogCategory::where('slug', $slug)->firstOrFail();
 
@@ -85,6 +91,7 @@ class BlogController extends Controller
 
         // 5. Return the view with the filtered data
         return view('blog', [
+            'profile'=> $profile,
             'allBlogs' => $allBlogs,
             'categories' => $categories,
             'currentCategory' => $category, // Useful for displaying the current filter
@@ -94,6 +101,9 @@ class BlogController extends Controller
 
     public function indexByTag($slug)
     {
+
+        $profile = VisitorProfile::where('visitor_uuid', session('visitor_uuid'))->first();
+
         // 1. Find the Tag based on the slug, or fail
         $tag = Tag::where('slug', $slug)->firstOrFail();
 
@@ -111,6 +121,7 @@ class BlogController extends Controller
 
         // 4. Return the standard blog view with the filtered data
         return view('blog', [
+            'profile'=> $profile,
             'allBlogs' => $allBlogs,
             'categories' => $categories,
             'featuredBlogs' => $featuredBlogs,
@@ -139,6 +150,7 @@ class BlogController extends Controller
      */
     public function show($slug)
     {
+        $profile = VisitorProfile::where('visitor_uuid', session('visitor_uuid'))->first();
 
         // 1. Find the current blog post using route model binding/slug
         $blog = Blog::where('slug', $slug)->firstOrFail();
@@ -199,6 +211,7 @@ class BlogController extends Controller
         $categories = BlogCategory::withCount('blogs')->get();
 
         return view('blog-details', [
+            'profile'=>$profile,
             'blog' => $blog,
             'relatedBlogs' => $relatedBlogs,
             'categories' => $categories, // Passed if you include the categories widget

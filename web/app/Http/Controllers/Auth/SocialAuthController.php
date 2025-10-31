@@ -180,6 +180,7 @@ class SocialAuthController extends Controller
         $visitor = VisitorProfile::where('email', $request->email)->first();
 
         if (!$visitor || !Hash::check($request->password, $visitor->password)) {
+
             return back()->with('msg', [
                 'type' => 'error',
                 'text' => 'Logged in failed!',

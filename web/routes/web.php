@@ -10,6 +10,13 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\SitemapController;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
+use App\Models\Blog;
+use App\Models\Package;
+use App\Models\GalleryCategory;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +28,7 @@ use App\Http\Controllers\OfferController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 
 
 Route::get('language/{locale}', function ($locale) {
@@ -76,8 +83,15 @@ Route::get('/testimonials', function () {
 
 /*Route::get('/blog-details/{id}/{cat_id}', 'App\Http\Controllers\BlogDetailsController@show')->name('blog-details');*/
 
-Route::get('/offers', [App\Http\Controllers\OfferController::class, 'index'])->name('offers');
-Route::post('/offers/book', [App\Http\Controllers\OfferController::class, 'book'])->name('offers.book');
+/*Route::get('/offers', [App\Http\Controllers\OfferController::class, 'index'])
+->middleware('auth')
+->name('offers');*/
+
+Route::get('/offers', [OfferController::class, 'index'])
+    ->middleware('checkofferlogin','nocache')
+    ->name('offers');
+
+Route::post('/offers/book', [App\Http\Controllers\OfferController::class, 'book'])->middleware('checkofferlogin')->name('offers.book');
 
 
 
